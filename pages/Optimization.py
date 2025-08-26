@@ -272,7 +272,7 @@ if __name__ == '__main__':
 
         # Define initial data for user input
 
-        st.subheader("Input Min/Max constraints")
+        #st.subheader("Input Min/Max constraints")
 
 
         channel_names = list(model_result_df['channel'])
@@ -288,8 +288,8 @@ if __name__ == '__main__':
 
         data = pd.DataFrame({
             "Channel Name": channel_names,
-            "Min Value": [0] * len(channel_names),
-            "Max Value": [10000000] * len(channel_names),
+            "Min Value (in $)": [0] * len(channel_names),
+            "Max Value (in $)": [10000000] * len(channel_names),
         })
         
         # Choose type of optimization
@@ -307,8 +307,8 @@ if __name__ == '__main__':
             data,
             column_config={
                 "Channel Name": st.column_config.TextColumn("Channel Name", disabled=True),
-                "Min Value": st.column_config.NumberColumn("Min Value", min_value=0, step=1000),
-                "Max Value": st.column_config.NumberColumn("Max Value", min_value=0, step=1000)
+                "Min Value (in $)": st.column_config.NumberColumn("Min Value (in $)", min_value=0, step=1000),
+                "Max Value (in $)": st.column_config.NumberColumn("Max Value (in $)", min_value=0, step=1000)
             },
             hide_index=True,
             key="editable_table"
@@ -322,8 +322,8 @@ if __name__ == '__main__':
         }
 
         for channel in optimizer_dict.keys():
-            optimizer_dict[channel]['min'] = edited_df[edited_df['Channel Name']==channel]['Min Value'].values[0]
-            optimizer_dict[channel]['max'] = edited_df[edited_df['Channel Name']==channel]['Max Value'].values[0]
+            optimizer_dict[channel]['min'] = edited_df[edited_df['Channel Name']==channel]['Min Value (in $)'].values[0]
+            optimizer_dict[channel]['max'] = edited_df[edited_df['Channel Name']==channel]['Max Value (in $)'].values[0]
 
 
         if st.button("Run Optimizer"):
@@ -338,13 +338,14 @@ if __name__ == '__main__':
 
                 optimizer_result_df_display = optimizer_result_df.rename(columns = {
                     'channel':'Channel',
-                    'spend':'Current Spend',
-                    'optimal_spend':'Recommended Spend',
-                    'sensor_volume':'Expected Product Volume',
-                    'net_sales':'Expected Net Sales',
+                    'spend':'Current Spend (in $)',
+                    'optimal_spend':'Recommended Spend (in $)',
+                    'sensor_volume':'Expected Product Volume (in TRx)',
+                    'net_sales':'Expected Net Sales (in $)',
                     'roi':'Expected ROI',
                     'mroi':'Expected mROI'
                 })
+                optimizer_result_df_display.drop(columns = ['Expected mROI'], inplace = True)
 
                 def bold_last_row(df):
                     def apply_bold(data):
