@@ -182,7 +182,7 @@ if uploaded_file:
                 'channel':'Channel',
                 'coefficient':'Coefficient',
                 'impactable%':'Contribution (%)',
-                'spend':'Spend',
+                'spend':'Spend (in $)',
                 'roi':'ROI' 
             })           
             
@@ -234,7 +234,7 @@ if uploaded_file:
                     fig.add_vline(
                         x=mroi1_spend,
                         line_dash="dash", line_color="red",
-                        annotation_text=f"MROI = 1\nSpend = {mroi1_spend:,.0f}",
+                        annotation_text=f"mROI = 0\nSpend = ${mroi1_spend:,.0f}",
                         annotation_position="top",
                         annotation_font_size=12
                     )
@@ -297,6 +297,8 @@ if uploaded_file:
                             name=f"{prefix} mroi ≈ 1"
                         )
 
+                        formatted_spend = f"${mroi_1_spend:,.0f}"
+
                         # Separate out the spend values on top of the vertical lines and display the corresponding spend
                         offset = 0  # Initialize offset for separation
                         while mroi_1_spend in [ann['x'] for ann in fig_multi['layout']['annotations']]:
@@ -304,7 +306,7 @@ if uploaded_file:
                         fig_multi.add_annotation(
                             x=mroi_1_spend,
                             y=max(merged_rc[y_col]) + offset,  # Apply the offset to separate annotations
-                            text=f"{prefix.replace('_', ' ').title()} Spend: {mroi_1_spend:.2f}",
+                            text=f"{prefix.replace('_', ' ').title()} Spend: {formatted_spend}",
                             showarrow=True,
                             arrowhead=2,
                             ax=0,
